@@ -420,7 +420,11 @@ void convert_music(FILE *fp, uint32_t ch, SOUND_TYPE sound_type, const char *chn
                 }
                 break;
             case 0xf7:
-                ll -= fprintf(fp, "w%u", (uint32_t)d[o++]);
+                c = d[o++];
+                if (c != 0xff)
+                {
+                    ll -= fprintf(fp, "w%u", c);
+                }
                 break;
             case 0xf8:
                 c = d[o++];
