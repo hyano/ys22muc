@@ -441,7 +441,14 @@ void convert_music(FILE *fp, uint32_t ch, SOUND_TYPE sound_type, const char *chn
                 o += 6;
                 break;
             case 0xfd:
-                ll -= fprintf(fp, "D%d", (int16_t)get_word(&d[o]));
+                if (sound_type & SOUND_TYPE_FM)
+                {
+                    ll -= fprintf(fp, "D%d", (int16_t)get_word(&d[o]));
+                }
+                else
+                {
+                    ll -= fprintf(fp, "D%d", -(int16_t)get_word(&d[o]));
+                }
                 o += 2;
                 break;
             case 0xfe:
@@ -503,10 +510,6 @@ void convert_music(FILE *fp, uint32_t ch, SOUND_TYPE sound_type, const char *chn
             }
             ll -= fprintf(fp, "%s", notestr[note]);
             ll -= print_length(fp, clock, deflen, len);
-            if (d[o] & 0x80)
-            {
-                ll -= fprintf(fp, "&");
-            }
             o++;
         }
     }
